@@ -3,13 +3,12 @@ import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import auth from "../utils/authentication";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import {  BACKGROUND_IMAGE, USER_AVATAR } from "../utils/constants";
 
 const Login = () => {
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isSignInForm, setIsSignInForm] = useState(true); // true for sign-in, false for sign-up
     const [erroMessage, setErrorMessage] = useState("");
@@ -36,25 +35,19 @@ const Login = () => {
                     console.log("User signed up:", user);
 
                     updateProfile(user, {
-                        displayName: name.current.value, photoURL: "https://avatars.githubusercontent.com/u/26349858?v=4"
+                        displayName: name.current.value, photoURL: USER_AVATAR
                         }).then(() => {
                         const {uid, email, displayName,photoURL} = auth.currentUser;
                         dispatch(addUser({uid:uid, email:email, displayName:displayName,photoURL:photoURL}));
-                            
-                         navigate("/browse");
                         }).catch((error) => {
                            setErrorMessage(error.message);
                         });
-                   
-                    
-
                 })
                 .catch((error) => {
                     console.log("Error signing up:", error);
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     setErrorMessage(errorCode + "-" + errorMessage);
-
                 })
         } else {
             // Sign in logic here
@@ -64,9 +57,6 @@ const Login = () => {
                     // Signed in 
                     const user = userCredential.user;
                     console.log("User signed in:", user);
-                    navigate("/browse");
-
-                    // ...
                 })
                 .catch((error) => {
                     console.log("Error signing in:", error);
@@ -75,8 +65,6 @@ const Login = () => {
                     setErrorMessage(errorCode + "-" + errorMessage);
                 });
         }
-
-
         e.preventDefault();
     }
     const toggleSignInForm = () => {
@@ -90,7 +78,7 @@ const Login = () => {
         <div >
             <Header />
             <div className="absolute">
-                <img src="https://assets.nflxext.com/ffe/siteui/vlv3/9ba9f0e2-b246-47f4-bd1f-3e84c23a5db8/web/IN-en-20251020-TRIFECTA-perspective_d6da84e9-6145-4b1e-bb51-e402c966a045_small.jpg" alt="Netflix Login Background" style={{ width: '100%' }} />
+                <img src={BACKGROUND_IMAGE} alt="Netflix Login Background" style={{ width: '100%' }} />
             </div>
             <form className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80" >
                 <h1 className="font-bold text-3xl py-3">{isSignInForm ? 'Sign In' : 'Sign Up'}</h1>

@@ -12,7 +12,7 @@ const useUpcomingMovies = () => {
             const url = 'https://api.themoviedb.org/3/movie/upcoming?page=1';
             const data = await fetch(url, API_OPTIONS);
             const json = await data.json();
-            console.log("Upcoming Movie:", json.results);
+            // console.log("Upcoming Movie:", json.results);
             dispatch(addUpcomingMovies(json.results));
         } catch (error) {
             console.log(error);

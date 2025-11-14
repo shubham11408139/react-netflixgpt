@@ -1,7 +1,11 @@
-import Login from './Login'
-import Browse from './Browse'
+
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter,  RouterProvider } from 'react-router'
 
+
+
+const Login = lazy(() => import('./Login'));
+const Browse = lazy(() => import('./Browse'));
 
 const Body = () => {
    
@@ -20,9 +24,9 @@ const Body = () => {
 
   
   return (
-    <div>
+    <Suspense fallback={<div className="text-white text-center mt-10">Loading...</div>}>
         <RouterProvider router={appRouter}/>
-    </div>
+    </Suspense>
   )
 }
 

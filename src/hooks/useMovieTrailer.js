@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { API_OPTIONS } from "../utils/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTrailerVideo } from "../utils/moviesSlice";
 
 //fetch trailer videos
@@ -24,12 +24,16 @@ const getMovieVideos = async (movieId, dispatch, signal) => {
 const useMovieTrailer = (movieId) => {
     // fetch trailer video && updating the store with trailer video data
     const dispatch = useDispatch();
+    const trailerVideo = useSelector((store) => store.movies.trailerVideo);
+
     useEffect(() => {
         if (!movieId) return;
         const abortController = new AbortController();
         const signal = abortController.signal;
         // ✅ pass dependencies explicitly
-        getMovieVideos(movieId, dispatch, signal)
+        if(!trailerVideo){
+            getMovieVideos(movieId, dispatch, signal)
+        }
         // cleanup
         return () => abortController.abort();
     }, [movieId, dispatch]);
